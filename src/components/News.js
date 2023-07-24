@@ -6,16 +6,17 @@ import Col from "react-bootstrap/Col";
 import { Button } from "react-bootstrap";
 
 export class News extends Component {
+  apiKey = process.env.REACT_APP_NEWS_API;
   constructor() {
     super();
     this.state = {
       articles: [], //state is accessing articles
       isLoading: false,
-      page: 1
+      page: 1,
     };
   }
   async componentDidMount() {
-    let url = `https://newsapi.org/v2/top-headlines?country=in&apiKey=0f85870f0b664682800893ce24fd3b56&page=${this.state.page}&pageSize=21`;
+    let url = `https://newsapi.org/v2/top-headlines?country=in&apiKey=${this.apiKey}&page=${this.state.page}&pageSize=21`;
     let data = await fetch(url);
     let parsedData = await data.json();
     console.log(parsedData);
@@ -26,9 +27,9 @@ export class News extends Component {
   }
 
   handlePrevClick = async () => {
-    let url = `https://newsapi.org/v2/top-headlines?country=in&apiKey=0f85870f0b664682800893ce24fd3b56&page=${
-      this.state.page - 1
-    }&pageSize=21`;
+    let url = `https://newsapi.org/v2/top-headlines?country=in&apiKey=${
+      this.apiKey
+    }&page=${this.state.page - 1}&pageSize=21`;
     let data = await fetch(url);
     let parsedData = await data.json();
     this.setState({
@@ -39,9 +40,9 @@ export class News extends Component {
   };
 
   handleNextClick = async () => {
-    let url = `https://newsapi.org/v2/top-headlines?country=in&apiKey=0f85870f0b664682800893ce24fd3b56&page=${
-      this.state.page + 1
-    }&pageSize=21`;
+    let url = `https://newsapi.org/v2/top-headlines?country=in&apiKey=${
+      this.apiKey
+    }&page=${this.state.page + 1}&pageSize=21`;
     let data = await fetch(url);
     let parsedData = await data.json();
     this.setState({
