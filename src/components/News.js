@@ -11,22 +11,24 @@ export class News extends Component {
     this.state = {
       articles: [], //state is accessing articles
       isLoading: false,
+      page: 1
     };
   }
   async componentDidMount() {
-    let url = `https://newsapi.org/v2/top-headlines?country=in&apiKey=0f85870f0b664682800893ce24fd3b56&page=${this.state.page}`;
+    let url = `https://newsapi.org/v2/top-headlines?country=in&apiKey=0f85870f0b664682800893ce24fd3b56&page=${this.state.page}&pageSize=21`;
     let data = await fetch(url);
     let parsedData = await data.json();
     console.log(parsedData);
     this.setState({
       articles: parsedData.articles,
-      page: 1,
-      isLoading: false,
+      pageSize: parsedData.totalResults,
     });
   }
 
   handlePrevClick = async () => {
-    let url = `https://newsapi.org/v2/top-headlines?country=in&apiKey=0f85870f0b664682800893ce24fd3b56&page=${this.state.page-1}`;
+    let url = `https://newsapi.org/v2/top-headlines?country=in&apiKey=0f85870f0b664682800893ce24fd3b56&page=${
+      this.state.page - 1
+    }&pageSize=21`;
     let data = await fetch(url);
     let parsedData = await data.json();
     this.setState({
@@ -35,8 +37,11 @@ export class News extends Component {
     });
     console.log(this.state.page);
   };
+
   handleNextClick = async () => {
-    let url = `https://newsapi.org/v2/top-headlines?country=in&apiKey=0f85870f0b664682800893ce24fd3b56&page=${this.state.page+1}`;
+    let url = `https://newsapi.org/v2/top-headlines?country=in&apiKey=0f85870f0b664682800893ce24fd3b56&page=${
+      this.state.page + 1
+    }&pageSize=21`;
     let data = await fetch(url);
     let parsedData = await data.json();
     this.setState({
@@ -54,7 +59,7 @@ export class News extends Component {
           <Row md={3}>
             {this.state.articles.map((element) => {
               return (
-                <div key={element.id}>
+                <div key={element.url}>
                   <Col className="m-4">
                     {" "}
                     <NewsItem
@@ -84,7 +89,13 @@ export class News extends Component {
             {" "}
             &larr; Previous{" "}
           </Button>
-          <Button onClick={this.handleNextClick}> Next &rarr; </Button>
+          <Button
+            disabled={this.state.page + 1 > Math.ceil(this.state.pageSize / 21)}
+            onClick={this.handleNextClick}
+          >
+            {" "}
+            Next &rarr;{" "}
+          </Button>
         </Container>
       </div>
     );
