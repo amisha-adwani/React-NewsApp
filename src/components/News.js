@@ -4,6 +4,7 @@ import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import { Button } from "react-bootstrap";
+import LoadingSpinner from "./LoadingSpinner.js";
 
 export class News extends Component {
   apiKey = process.env.REACT_APP_NEWS_API;
@@ -16,25 +17,27 @@ export class News extends Component {
     };
   }
   async componentDidMount() {
-    let url = `https://newsapi.org/v2/top-headlines?country=in&apiKey=${this.apiKey}&page=${this.state.page}&pageSize=21`;
+    let url = `https://newsapi.org/v2/top-headlines?country=in&apiKey=${this.apiKey}&page=${this.state.page}&pageSize=${this.props.pageSize}`;
     let data = await fetch(url);
     let parsedData = await data.json();
     console.log(parsedData);
     this.setState({
       articles: parsedData.articles,
-      pageSize: parsedData.totalResults,
+      totalResults: parsedData.totalResults,
     });
   }
 
   handlePrevClick = async () => {
     let url = `https://newsapi.org/v2/top-headlines?country=in&apiKey=${
       this.apiKey
-    }&page=${this.state.page - 1}&pageSize=21`;
+    }&page=${this.state.page - 1}&pageSize=${this.props.pageSize}`;
+    this.setState({isLoading: true})
     let data = await fetch(url);
     let parsedData = await data.json();
     this.setState({
       articles: parsedData.articles,
       page: this.state.page - 1,
+      isLoading: false
     });
     console.log(this.state.page);
   };
@@ -42,12 +45,14 @@ export class News extends Component {
   handleNextClick = async () => {
     let url = `https://newsapi.org/v2/top-headlines?country=in&apiKey=${
       this.apiKey
-    }&page=${this.state.page + 1}&pageSize=21`;
+    }&page=${this.state.page + 1}&pageSize=${this.props.pageSize}`;
+    this.setState({isLoading: true})
     let data = await fetch(url);
     let parsedData = await data.json();
     this.setState({
       articles: parsedData.articles,
       page: this.state.page + 1,
+      isLoading: false
     });
     console.log(this.state.page);
   };
@@ -56,9 +61,10 @@ export class News extends Component {
       <div>
         <Container>
           <h2>Top Headlines for today</h2>
+       {this.state.isLoading && <LoadingSpinner />}
           {/* console.log(this.state.articles) */}
           <Row md={3}>
-            {this.state.articles.map((element) => {
+           {!this.state.isLoading &&  this.state.articles.map((element) => {
               return (
                 <div key={element.url}>
                   <Col className="m-4">
@@ -91,7 +97,7 @@ export class News extends Component {
             &larr; Previous{" "}
           </Button>
           <Button
-            disabled={this.state.page + 1 > Math.ceil(this.state.pageSize / 21)}
+            disabled={this.state.page + 1 > Math.ceil(this.state.totalResults / this.props.pageSize)}
             onClick={this.handleNextClick}
           >
             {" "}
