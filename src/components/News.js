@@ -74,6 +74,9 @@ export class News extends Component {
                       description={element.description && element.description.slice(0, 80)}
                       ImageUrl={element.urlToImage}
                       NewsUrl={element.url}
+                      author={element.author}
+                      date={element.publishedAt}
+                      source={element.source.name}
                     >
                       {" "}
                     </NewsItem>{" "}
@@ -84,7 +87,7 @@ export class News extends Component {
           </Row>
         </Container>
 
-        <Container className="d-flex justify-content-between">
+        <Container className="d-flex justify-content-between my-2">
           <Button
             disabled={this.state.page <= 1}
             onClick={this.handlePrevClick}
