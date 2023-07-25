@@ -7,14 +7,14 @@ export class NewsItem extends Component {
     let { title, description, ImageUrl, NewsUrl } = this.props;
     return (
       <div>
-        <Card style={{ width: "18rem", height: "23rem" }}>
+        <Card >
           <Card.Img
             variant="top"
             src={ImageUrl}
-            style={{ width: "18rem", height: "10rem" }}
+            style={{  height: "14rem" }}
           />
           <Card.Body>
-            <Card.Title>{title}...</Card.Title>
+            <Card.Title>{title}..</Card.Title>
             <Card.Text>{description}...</Card.Text>
             <Button variant="primary" href={NewsUrl} target="_blank">
               Read More

@@ -60,22 +60,18 @@ export class News extends Component {
     return (
       <div>
         <Container>
-          <h2>Top Headlines for today</h2>
+          <h2 style={{textAlign:'center'}} className="m-4">Top stories today</h2>
        {this.state.isLoading && <LoadingSpinner />}
           {/* console.log(this.state.articles) */}
-          <Row md={3}>
+          <Row xs={1} md={2} lg={3}className="g-4">
            {!this.state.isLoading &&  this.state.articles.map((element) => {
               return (
                 <div key={element.url}>
                   <Col className="m-4">
                     {" "}
                     <NewsItem
-                      title={element.title ? element.title.slice(0, 40) : ""}
-                      description={
-                        element.description
-                          ? element.description.slice(0, 80)
-                          : ""
-                      }
+                      title={element.title && element.title.slice(0,52)}
+                      description={element.description && element.description.slice(0, 80)}
                       ImageUrl={element.urlToImage}
                       NewsUrl={element.url}
                     >
