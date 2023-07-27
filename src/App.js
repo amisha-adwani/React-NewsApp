@@ -14,13 +14,13 @@ export class App extends Component {
         <Router>
         <NavBar />
         <Routes>
-         <Route path='/home' element={<News key='general' category='general' pageSize='8' />}/>
-         <Route path='/business' element={<News key='business' category='business' pageSize='8' />}/>
-         <Route path='/entertainment' element={<News key='entertainment' category='entertainment' pageSize='8' />}/>
-         <Route path='/health' element={<News key='health' category='health' pageSize='8' />}/>
-         <Route path='/science' element={<News key='science' category='science' pageSize='8' />}/>
-         <Route path='/sports' element={<News key='sports' category='sports' pageSize='8' />}/>
-         <Route path='/technology' element={<News key='technology' category='technology' pageSize='8' />}/>
+         <Route path='/home' element={<News key='general' category='General' pageSize='8' />}/>
+         <Route path='/business' element={<News key='business' category='Business' pageSize='8' />}/>
+         <Route path='/entertainment' element={<News key='entertainment' category='Entertainment' pageSize='8' />}/>
+         <Route path='/health' element={<News key='health' category='Health' pageSize='8' />}/>
+         <Route path='/science' element={<News key='science' category='Science' pageSize='8' />}/>
+         <Route path='/sports' element={<News key='sports' category='Sports' pageSize='8' />}/>
+         <Route path='/technology' element={<News key='technology' category='Technology' pageSize='8' />}/>
         </Routes>
         </Router>
       </div>

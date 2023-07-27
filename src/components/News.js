@@ -8,13 +8,14 @@ import LoadingSpinner from "./LoadingSpinner.js";
 
 export class News extends Component {
   apiKey = process.env.REACT_APP_NEWS_API;
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.state = {
       articles: [], //state is accessing articles
       isLoading: false,
       page: 1,
     };
+    document.title = `Newsify - ${this.props.category}`
   }
 
    updateNews = async ()=>{
@@ -51,7 +52,7 @@ export class News extends Component {
     return (
       <div>
         <Container>
-          <h2 style={{textAlign:'center'}} className="m-4">Top stories today</h2>
+          <h2 style={{textAlign:'center'}} className="m-4">{`Top ${this.props.category} Stories`}</h2>
        {this.state.isLoading && <LoadingSpinner />}
           {/* console.log(this.state.articles) */}
           <Row xs={1} md={2} lg={3}className="g-4">
