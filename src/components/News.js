@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { useState,useEffect } from "react";
 import NewsItem from "./NewsItem";
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
@@ -6,62 +6,58 @@ import Col from "react-bootstrap/Col";
 import { Button } from "react-bootstrap";
 import LoadingSpinner from "./LoadingSpinner.js";
 
-export class News extends Component {
-  apiKey = process.env.REACT_APP_NEWS_API;
-  constructor(props) {
-    super(props);
-    this.state = {
-      articles: [], //state is accessing articles
-      isLoading: false,
-      page: 1,
-    };
-    document.title = `Newsify - ${this.props.category}`
-  }
+const News =(props)=> {
+  const [articles, setArticles] = useState([])
+  const [isLoading, setIsLoading] = useState(false)
+  const [page, setPage] = useState(1)
+  const [totalResults, setTotalResults] = useState(0)
+  
+  document.title = `Newsify - ${props.category}`
 
-   updateNews = async ()=>{
-    this.props.setProgress(0)
-    let url = `https://newsapi.org/v2/top-headlines?country=in&category=${this.props.category}&apiKey=${this.apiKey}&page=${this.state.page}&pageSize=${this.props.pageSize}`;
+  let apiKey = process.env.REACT_APP_NEWS_API;
+
+   const updateNews = async ()=>{
+    props.setProgress(0)
+    let url = `https://newsapi.org/v2/top-headlines?country=in&category=${props.category}&apiKey=${apiKey}&page=${page}&pageSize=${props.pageSize}`;
+    setIsLoading(true)
     let data = await fetch(url);
-    this.props.setProgress(30)
+    props.setProgress(30)
     let parsedData = await data.json();
-    this.props.setProgress(50)
+    props.setProgress(50)
     console.log(parsedData);
-    this.setState({
-      articles: parsedData.articles,
-      totalResults: parsedData.totalResults,
-    });
-    this.props.setProgress(100)
+    setArticles(parsedData.articles)
+    setTotalResults(parsedData.totalResults)
+    setIsLoading(false)
+    props.setProgress(100)
   }
+ 
+  useEffect(()=>{
+    updateNews()
+    // eslint-disable-next-line
+  },([]))
+  
 
-  async componentDidMount() {
-    this.updateNews()
-  }
-
-  handlePrevClick = async () => {
-     this.setState({
-      page: this.state.page - 1
-    },()=>this.updateNews());
-    
-    console.log(this.state.page);
-    console.log(this.props.category);
+  const handlePrevClick = async () => {
+    setPage(page - 1)
+    updateNews();
+    console.log(page);
+    console.log(props.category);
   };
 
-  handleNextClick = async () => {
-     this.setState({
-      page: this.state.page + 1,
-    },()=> this.updateNews());
-    console.log(this.state.page);
-    console.log(this.props.category);
+  const handleNextClick = async () => {
+    updateNews();
+    setPage(page + 1)
+    console.log(page);
+    console.log(props.category);
   };
-  render() {
+  
     return (
       <div>
         <Container>
-          <h2 style={{textAlign:'center'}} className="m-4">{`Top ${this.props.category} Stories`}</h2>
-         {this.state.isLoading && <LoadingSpinner />}
-          {/* console.log(this.state.articles) */}
+          <h2 style={{textAlign:'center'}} className="m-4">{`Top ${props.category} Stories`}</h2>
+         {isLoading && <LoadingSpinner />}
           <Row xs={1} md={2} lg={3}className="g-4">
-           {!this.state.isLoading &&  this.state.articles.map((element) => {
+           {!isLoading &&  articles.map((element) => {
               return (
                 <div key={element.url}>
                   <Col className="m-4">
@@ -86,15 +82,15 @@ export class News extends Component {
 
         <Container className="d-flex justify-content-between my-2">
           <Button
-            disabled={this.state.page <= 1}
-            onClick={this.handlePrevClick}
+            disabled={page <= 1}
+            onClick={handlePrevClick}
           >
             {" "}
             &larr; Previous{" "}
           </Button>
           <Button
-            disabled={this.state.page + 1 > Math.ceil(this.state.totalResults / this.props.pageSize)}
-            onClick={this.handleNextClick}
+            disabled={page + 1 > Math.ceil(totalResults / props.pageSize)}
+            onClick={handleNextClick}
           >
             {" "}
             Next &rarr;{" "}
@@ -102,7 +98,7 @@ export class News extends Component {
         </Container>
       </div>
     );
-  }
+  
 }
 
 export default News;

@@ -1,11 +1,11 @@
-import React, { Component } from "react";
+import React from "react";
 import Button from "react-bootstrap/Button";
 import Card from "react-bootstrap/Card";
 import Badge from "react-bootstrap/Badge";
 
-export class NewsItem extends Component {
-  render() {
-    let { title, description, ImageUrl, NewsUrl, author, date, source } = this.props;
+const NewsItem =(props)=> {
+
+    let { title, description, ImageUrl, NewsUrl, author, date, source } = props;
     return (
       <div>
         <Badge bg="secondary" >{source}</Badge>
@@ -27,7 +27,7 @@ export class NewsItem extends Component {
         </Card>
       </div>
     );
-  }
+  
 }
 
 export default NewsItem;
