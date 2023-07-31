@@ -7,13 +7,14 @@ import Navbar from "react-bootstrap/Navbar";
 //import NavDropdown from "react-bootstrap/NavDropdown";
 import { LinkContainer } from "react-router-bootstrap";
 
+
 export class NavBar extends Component {
   render() {
     return (
       <div>
-        <Navbar expand="lg" bg="dark" data-bs-theme="dark">
+        <Navbar expand="lg" bg="dark" data-bs-theme="dark" fixed="top">
           <Container>
-            <LinkContainer to="/home">
+            <LinkContainer to="/">
               <Navbar.Brand>Newsify</Navbar.Brand>
             </LinkContainer>
             <Navbar.Toggle aria-controls="responsive-navbar-nav" />
