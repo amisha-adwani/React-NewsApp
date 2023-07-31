@@ -8,24 +8,29 @@ import LoadingSpinner from "./LoadingSpinner.js";
 
 export class News extends Component {
   apiKey = process.env.REACT_APP_NEWS_API;
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.state = {
       articles: [], //state is accessing articles
       isLoading: false,
       page: 1,
     };
+    document.title = `Newsify - ${this.props.category}`
   }
 
    updateNews = async ()=>{
+    this.props.setProgress(0)
     let url = `https://newsapi.org/v2/top-headlines?country=in&category=${this.props.category}&apiKey=${this.apiKey}&page=${this.state.page}&pageSize=${this.props.pageSize}`;
     let data = await fetch(url);
+    this.props.setProgress(30)
     let parsedData = await data.json();
+    this.props.setProgress(50)
     console.log(parsedData);
     this.setState({
       articles: parsedData.articles,
       totalResults: parsedData.totalResults,
     });
+    this.props.setProgress(100)
   }
 
   async componentDidMount() {
@@ -36,6 +41,7 @@ export class News extends Component {
      this.setState({
       page: this.state.page - 1
     },()=>this.updateNews());
+    
     console.log(this.state.page);
     console.log(this.props.category);
   };
@@ -51,8 +57,8 @@ export class News extends Component {
     return (
       <div>
         <Container>
-          <h2 style={{textAlign:'center'}} className="m-4">Top stories today</h2>
-       {this.state.isLoading && <LoadingSpinner />}
+          <h2 style={{textAlign:'center'}} className="m-4">{`Top ${this.props.category} Stories`}</h2>
+         {this.state.isLoading && <LoadingSpinner />}
           {/* console.log(this.state.articles) */}
           <Row xs={1} md={2} lg={3}className="g-4">
            {!this.state.isLoading &&  this.state.articles.map((element) => {
