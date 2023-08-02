@@ -16,9 +16,9 @@ const News =(props)=> {
 
   let apiKey = process.env.REACT_APP_NEWS_API;
 
-   const updateNews = async ()=>{
+   const updateNews = async (currentPage)=>{
     props.setProgress(0)
-    let url = `https://newsapi.org/v2/top-headlines?country=in&category=${props.category}&apiKey=${apiKey}&page=${page}&pageSize=${props.pageSize}`;
+    let url = `https://newsapi.org/v2/top-headlines?country=in&category=${props.category}&apiKey=${apiKey}&page=${currentPage}&pageSize=${props.pageSize}`;
     setIsLoading(true)
     let data = await fetch(url);
     props.setProgress(30)
@@ -38,23 +38,29 @@ const News =(props)=> {
   
 
   const handlePrevClick = async () => {
-    setPage(page - 1)
-    updateNews();
-    console.log(page);
+    const prevPage = page-1
+    setIsLoading(true)
+    setPage(prevPage)
+   await updateNews(prevPage);
+    setIsLoading(false)
+    console.log(prevPage);
     console.log(props.category);
   };
 
   const handleNextClick = async () => {
-    updateNews();
-    setPage(page + 1)
-    console.log(page);
+    const nextPage = page+1
+    setIsLoading(true)
+    setPage(nextPage)
+    await updateNews(nextPage);
+    setIsLoading(false)
+    console.log(nextPage);
     console.log(props.category);
   };
   
     return (
       <div>
         <Container>
-          <h2 style={{textAlign:'center'}} className="m-4">{`Top ${props.category} Stories`}</h2>
+          <h2 style={{textAlign:'center', marginTop:"50px"}} >{`Top ${props.category} Stories`}</h2>
          {isLoading && <LoadingSpinner />}
           <Row xs={1} md={2} lg={3}className="g-4">
            {!isLoading &&  articles.map((element) => {
